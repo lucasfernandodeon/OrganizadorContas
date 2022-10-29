@@ -14,9 +14,16 @@ const BillSList = () => {
 
   const [bills, setBills] = useState([])
 
+  const [emptyList, setEmptyList] = useState(true);
+
   const searchBills = () => {
     axios.get('http://192.168.0.160:3000/bill').then((result) => {
       setBills(result.data);
+      if(result.data.length>0){
+        setEmptyList(false)
+      }else{
+        setEmptyList(true)
+      }
     })
   }
   const deleteBill = (id) => {
@@ -89,7 +96,11 @@ const BillSList = () => {
         )}
         leftOpenValue={70}
       />
-      
+      {emptyList ? (
+          <Text
+            style={styles.emptyListTextSytle}>
+            Adicione as suas contas.
+          </Text>) : null}
 
       <TouchableOpacity
         onPress={() => navigation.navigate('Cadastrar/Atualizar conta')}
@@ -101,7 +112,15 @@ const BillSList = () => {
   );
 }
 const styles = StyleSheet.create({
- 
+  emptyListTextSytle: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    fontWeight: "bold",
+    color: "black",
+    fontSize: 20,
+  },
   containerViewStyle: {
     flexDirection: "row",
     backgroundColor: '#E0E0E0',
